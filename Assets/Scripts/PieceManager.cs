@@ -34,8 +34,9 @@ namespace DefaultNamespace
 
             PlacePieces(1, 0, mWhitePieces, board);
             PlacePieces(6, 7, mBlackPieces, board);
-            
-            SwitchSides(Color.black);
+
+            SetInteractive(mWhitePieces, false);
+            SetInteractive(mBlackPieces, false);
         }
 
         private List<BasePiece> CreatePieces(Color teamColor, Color32 spriteColor)
@@ -65,18 +66,18 @@ namespace DefaultNamespace
             }
         }
 
-        public void SwitchSides(Color color)
+        public void SwitchSides(Color currentColorMove)
         {
             if (!mIsKingAlive)
             {
                 /*ResetPieces();
                 mIsKingAlive = true;
-                color = Color.black;
-
-                bool isBlackTurn = color == Color.white;
-                SetInteractive(mWhitePieces, !isBlackTurn);
-                SetInteractive(mBlackPieces, isBlackTurn);*/
+                */
             }
+
+            bool isWhiteTurn = currentColorMove == Color.white;
+            SetInteractive(mWhitePieces, !isWhiteTurn);
+            SetInteractive(mBlackPieces, isWhiteTurn);
         }
 
         private void ResetPieces()
@@ -92,12 +93,17 @@ namespace DefaultNamespace
             }
         }
 
-        public void SetInteractive(IEnumerable<BasePiece> pieces, bool value)
+        private void SetInteractive(IEnumerable<BasePiece> pieces, bool value)
         {
             foreach (var piece in pieces)
             {
                 piece.enabled = value;
             }
+        }
+
+        public void StartGame()
+        {
+            SetInteractive(mWhitePieces, true);
         }
     }
 }

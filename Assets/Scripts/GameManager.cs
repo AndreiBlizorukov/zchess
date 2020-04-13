@@ -11,5 +11,12 @@ public class GameManager : MonoBehaviour
     {
         mBoard.Create();
         PieceManager.Setup(mBoard);
+        StartGame();
+    }
+
+    private void StartGame()
+    {
+        PieceManager.StartGame();
+        // @todo set timer
     }
 }
