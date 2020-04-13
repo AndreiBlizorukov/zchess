@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using UnityEngine.EventSystems;
 
-namespace DefaultNamespace
+namespace Pieces
 {
     public interface IPiece
     {

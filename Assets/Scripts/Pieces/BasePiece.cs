@@ -3,17 +3,17 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace DefaultNamespace
+namespace Pieces
 {
     public abstract class BasePiece : EventTrigger, IPiece
     {
         public Color mColor = Color.clear;
-        public Cell mOriginalCell = null;
-        public Cell mCurrentCell = null;
-        public Cell mTargetCell = null;
+        public Cell mOriginalCell;
+        public Cell mCurrentCell;
+        public Cell mTargetCell;
 
-        public RectTransform mRectTransform = null;
-        public PieceManager mPieceManager = null;
+        public RectTransform mRectTransform;
+        public PieceManager mPieceManager;
 
         protected Vector3Int mMovement = Vector3Int.one;
         protected List<Cell> mHightLightedCells = new List<Cell>();
@@ -68,7 +68,7 @@ namespace DefaultNamespace
                 {
                     break;
                 }
-                
+
                 mHightLightedCells.Add(mCurrentCell.mBoard.mAllCells[currentX, currentY]);
             }
         }
@@ -143,9 +143,9 @@ namespace DefaultNamespace
             if (!mTargetCell)
             {
                 transform.position = mCurrentCell.transform.position;
-                return; 
+                return;
             }
-            
+
             Move();
             mPieceManager.SwitchSides(mColor);
         }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace DefaultNamespace
+namespace Pieces
 {
     public class King : BasePiece
     {

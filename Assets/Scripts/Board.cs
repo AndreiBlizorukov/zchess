@@ -1,4 +1,4 @@
-﻿using DefaultNamespace;
+﻿using Pieces;
 using UnityEngine;
 using UnityEngine.UI;
 
