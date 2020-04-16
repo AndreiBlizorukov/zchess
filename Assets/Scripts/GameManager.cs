@@ -1,21 +1,15 @@
 ﻿using UnityEngine;
+using View;
 
 public class GameManager : MonoBehaviour
 {
-    public Board mBoard;
-
-    public PieceManager PieceManager;
-    // Start is called before the first frame update
+    public PieceManager pieceManager;
     void Start()
     {
-        mBoard.Create();
-        PieceManager.Setup(mBoard);
-        StartGame();
-    }
+        var engine = new GameEngine.Game();
+        engine.Setup();
 
-    private void StartGame()
-    {
-        PieceManager.StartGame();
-        // @todo set timer
+        pieceManager.CreateBoard();
+        pieceManager.Setup(engine);
     }
 }
