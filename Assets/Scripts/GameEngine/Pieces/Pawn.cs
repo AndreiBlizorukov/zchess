@@ -24,5 +24,10 @@ namespace GameEngine.Pieces
             base.BeingMoved();
             IsFirstMove = false;
         }
+
+        public override IPiece Copy()
+        {
+            return new Pawn(GetColor());
+        }
     }
 }

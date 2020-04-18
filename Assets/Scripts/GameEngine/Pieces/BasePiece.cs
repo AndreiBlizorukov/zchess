@@ -22,5 +22,7 @@ namespace GameEngine.Pieces
         public virtual void BeingMoved()
         {
         }
+
+        public abstract IPiece Copy();
     }
 }

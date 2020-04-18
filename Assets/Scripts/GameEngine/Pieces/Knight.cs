@@ -13,5 +13,10 @@ namespace GameEngine.Pieces
         {
             return Rules.Move.Knight.GetPotentialMoves(position, board);
         }
+
+        public override IPiece Copy()
+        {
+            return new Knight(GetColor());
+        }
     }
 }

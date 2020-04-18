@@ -86,10 +86,7 @@ namespace View
 
         public void HighLightCells(Cell currentCell)
         {
-            var highlightedPositions = _gameEngine
-                .GetAvailableCells(currentCell.position);
-
-            foreach (var highlightedPosition in highlightedPositions)
+            foreach (var highlightedPosition in _gameEngine.GetAvailableCells(currentCell.position))
             {
                 mBoard.mAllCells[highlightedPosition.x, highlightedPosition.y].mOutlineImage.enabled = true;
             }

@@ -14,5 +14,10 @@ namespace GameEngine.Pieces
         {
             return Rules.Move.RuleManager.GetPotentialMoves(position, _movement, board);
         }
+
+        public override IPiece Copy()
+        {
+            return new Bishop(GetColor());
+        }
     }
 }

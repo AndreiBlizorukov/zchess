@@ -71,12 +71,47 @@ namespace GameEngine
                 if (state != CellState.Free)
                 {
                     break;
-                }    
-                
+                }
+
                 path.Add(target);
             }
 
             return path;
+        }
+
+        public Board Copy()
+        {
+            var newBoard = new Board();
+            for (int x = 0; x < 8; x++)
+            {
+                for (int y = 0; y < 8; y++)
+                {
+                    if (mPieces[x, y] != null)
+                    {
+                        newBoard.mPieces[x, y] = mPieces[x, y].Copy();
+                    }
+                }
+            }
+
+            return newBoard;
+        }
+
+        public IEnumerable<Vector2Int> GetPiecesPositions(Color color)
+        {
+            for (int x = 0; x < 8; x++)
+            {
+                for (int y = 0; y < 8; y++)
+                {
+                    var piece = mPieces[x, y];
+                    if (piece != null)
+                    {
+                        if (piece.GetColor() == color)
+                        {
+                            yield return new Vector2Int(x, y);
+                        }
+                    }
+                }
+            }
         }
     }
 
