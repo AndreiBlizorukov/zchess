@@ -5,13 +5,15 @@ namespace GameEngine.Pieces
 {
     public class King : BasePiece
     {
+        private readonly Vector3Int _movement = Vector3Int.one;
+        
         public King(Color color) : base(color)
         {
         }
         
-        public override List<Vector2Int> GetPotentialMoves(Vector2Int position)
+        public override List<Vector2Int> GetAvailableMoves(Vector2Int position, Board board)
         {
-            return new List<Vector2Int>();
+            return Rules.Move.RuleManager.GetPotentialMoves(position, _movement, board);
         }
     }
 }

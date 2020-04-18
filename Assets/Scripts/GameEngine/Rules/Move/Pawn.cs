@@ -5,26 +5,32 @@ namespace GameEngine.Rules.Move
 {
     public static class Pawn
     {
-        public static List<Vector2Int> GetPotentialMoves(Vector2Int position, Vector2Int direction, bool isFirstMove)
+        public static List<Vector2Int> GetPotentialMoves(Vector2Int position, Vector2Int direction, bool isFirstMove, Board board)
         {
-            var moves = new List<Vector2Int>
+            var moves = new List<Vector2Int>();
+            for (int i = 1; i <= 2; i++)
             {
-                new Vector2Int
+                var targetDirection = new Vector2Int(position.x, position.y + direction.y * i);
+                var targetState = board.GetCellState(targetDirection, board.mPieces[position.x, position.y]);
+                if (targetState == CellState.Free)
                 {
-                    x = position.x,
-                    y = position.y + direction.y
+                    moves.Add(targetDirection);
                 }
-            };
 
-            if (isFirstMove)
+                if (!isFirstMove)
+                {
+                    break;
+                }
+            }
+
+            foreach (var attack in new[]{-1, 1})
             {
-                moves.Add(
-                    new Vector2Int
-                    {
-                        x = position.x,
-                        y = position.y + direction.y * 2
-                    }
-                );
+                var targetDirection = new Vector2Int(position.x - attack, position.y + direction.y);
+                var targetState = board.GetCellState(targetDirection, board.mPieces[position.x, position.y]);
+                if (targetState == CellState.Enemy)
+                {
+                    moves.Add(targetDirection);
+                }
             }
             
             return moves;

@@ -14,9 +14,9 @@ namespace GameEngine.Pieces
                 : new Vector2Int(0, -1);
         }
 
-        public override List<Vector2Int> GetPotentialMoves(Vector2Int position)
+        public override List<Vector2Int> GetAvailableMoves(Vector2Int position, Board board)
         {
-            return Rules.Move.Pawn.GetPotentialMoves(position, _direction, IsFirstMove);
+            return Rules.Move.Pawn.GetPotentialMoves(position, _direction, IsFirstMove, board);
         }
 
         public override void BeingMoved()

@@ -5,13 +5,14 @@ namespace GameEngine.Pieces
 {
     public class Bishop : BasePiece
     {
+        private readonly Vector3Int _movement = new Vector3Int(0, 0, 7);
         public Bishop(Color color) : base(color)
         {
         }
         
-        public override List<Vector2Int> GetPotentialMoves(Vector2Int position)
+        public override List<Vector2Int> GetAvailableMoves(Vector2Int position, Board board)
         {
-            return new List<Vector2Int>();
+            return Rules.Move.RuleManager.GetPotentialMoves(position, _movement, board);
         }
     }
 }

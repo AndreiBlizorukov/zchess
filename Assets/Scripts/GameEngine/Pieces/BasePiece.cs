@@ -17,7 +17,7 @@ namespace GameEngine.Pieces
             return _color;
         }
 
-        public abstract List<Vector2Int> GetPotentialMoves(Vector2Int position);
+        public abstract List<Vector2Int> GetAvailableMoves(Vector2Int position, Board board);
 
         public virtual void BeingMoved()
         {

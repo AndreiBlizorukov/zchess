@@ -413,7 +413,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1072341820733404, guid: 890f06b420792d646929aa3e5bb896ba, type: 3}
       propertyPath: m_Name
-      value: PR_PieceManager
+      value: PR_ViewManager
       objectReference: {fileID: 0}
     - target: {fileID: 114283005606547992, guid: 890f06b420792d646929aa3e5bb896ba,
         type: 3}
@@ -719,6 +719,11 @@ PrefabInstance:
     - target: {fileID: 114516425935054028, guid: a8333fd4e127fb24b9d46ab3bd855052,
         type: 3}
       propertyPath: pieceManager
+      value: 
+      objectReference: {fileID: 1100728793}
+    - target: {fileID: 114516425935054028, guid: a8333fd4e127fb24b9d46ab3bd855052,
+        type: 3}
+      propertyPath: ViewManager
       value: 
       objectReference: {fileID: 1100728793}
     m_RemovedComponents: []

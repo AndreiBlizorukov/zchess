@@ -9,9 +9,9 @@ namespace GameEngine.Pieces
         {
         }
 
-        public override List<Vector2Int> GetPotentialMoves(Vector2Int position)
+        public override List<Vector2Int> GetAvailableMoves(Vector2Int position, Board board)
         {
-            return new List<Vector2Int>();
+            return Rules.Move.Knight.GetPotentialMoves(position, board);
         }
     }
 }

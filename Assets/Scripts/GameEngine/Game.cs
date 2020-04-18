@@ -21,7 +21,7 @@ namespace GameEngine
             _whitePlayer = whitePlayer;
             _blackPlayer = blackPlayer;
             mCurrentPlayer = whitePlayer;
-            
+
             var pieces = _mode.CreatePieces();
             _board.PlacePieces(pieces);
         }
@@ -58,9 +58,7 @@ namespace GameEngine
                 throw new Exception("It should be a piece");
             }
 
-            var potentialMoves = piece.GetPotentialMoves(position);
-
-            return potentialMoves;
+            return piece.GetAvailableMoves(position, _board);
         }
     }
 }
