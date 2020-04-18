@@ -11,5 +11,7 @@ public class GameManager : MonoBehaviour
 
         pieceManager.CreateBoard();
         pieceManager.Setup(engine);
+
+        pieceManager.MoveWhite();
     }
 }

@@ -31,20 +31,22 @@ namespace View
         {
             RenderPieces(engine.GetBoard().mPieces);
 
-            SetInteractive(Pieces[Color.white], true);
+            SetInteractive(Pieces[Color.white], false);
             SetInteractive(Pieces[Color.black], false);
         }
 
         private void RenderPieces(IPiece[,] pieces)
         {
-            for (var y = 0; y < 8; y++)
+            
+            for (var x = 0; x < 8; x++)
             {
-                for (var x = 0; x < 8; x++)
+                for (var y = 0; y < 8; y++)
                 {
                     var piece = pieces[x, y];
                     if (piece != null)
                     {
                         var viewedPiece = CreatePiece(piece);
+                        Pieces[piece.GetColor()].Add(viewedPiece);
                         viewedPiece.Place(mBoard.mAllCells[x, y]);
                     }
                 }
@@ -77,6 +79,11 @@ namespace View
         public void CreateBoard()
         {
             mBoard.Create();
+        }
+
+        public void MoveWhite()
+        {
+            SetInteractive(Pieces[Color.white], true);
         }
     }
 }
