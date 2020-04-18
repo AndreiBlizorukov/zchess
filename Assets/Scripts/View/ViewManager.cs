@@ -145,6 +145,13 @@ namespace View
         {
             SetInteractive(Pieces[_gameEngine.mCurrentPlayer.GetColor()], false);
             _gameEngine.TogglePlayer();
+
+            if (_gameEngine.mCheckmate)
+            {
+                Debug.Log($"checkmate, winner is {_gameEngine.GetOppositePlayer().GetColor().ToString()} player");
+                return;
+            }
+            
             SetInteractive(Pieces[_gameEngine.mCurrentPlayer.GetColor()], true);
         }
     }

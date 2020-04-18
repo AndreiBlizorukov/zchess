@@ -16,6 +16,8 @@ namespace GameEngine
         private IPlayer _blackPlayer;
         public IPlayer mCurrentPlayer;
 
+        public bool mCheckmate = false;
+
         public void Setup(IMode mode, IPlayer whitePlayer, IPlayer blackPlayer)
         {
             _board = new Board();
@@ -36,6 +38,22 @@ namespace GameEngine
         public void TogglePlayer()
         {
             mCurrentPlayer = GetOppositePlayer();
+            mCheckmate = IsCheckmate();
+        }
+
+        private bool IsCheckmate()
+        {
+            var myPiecesPositions = _board.GetPiecesPositions(mCurrentPlayer.GetColor());
+            foreach (var myPiecesPosition in myPiecesPositions)
+            {
+                var myPiece = _board.mPieces[myPiecesPosition.x, myPiecesPosition.y];
+                var moves = FilterCheckmateMoves(myPiecesPosition, myPiece.GetAvailableMoves(myPiecesPosition, _board));
+                if (moves.Any())
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public IPlayer GetOppositePlayer()
@@ -71,7 +89,7 @@ namespace GameEngine
             {
                 var newBoard = _board.Copy();
                 newBoard.MovePiece(position, move);
-                
+
                 var enemyPiecePositions = newBoard.GetPiecesPositions(GetOppositePlayer().GetColor());
                 foreach (var enemyPiecePosition in enemyPiecePositions)
                 {
