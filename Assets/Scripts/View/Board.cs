@@ -22,6 +22,7 @@ namespace View
 
                     mAllCells[x, y] = newCell.GetComponent<Cell>();
                     mAllCells[x, y].Setup();
+                    mAllCells[x, y].SetPosition(x, y);
 
                     if ((x + y) % 2 == 0)
                     {

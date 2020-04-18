@@ -1,4 +1,5 @@
 ﻿using GameEngine.Pieces;
+using UnityEngine;
 
 namespace GameEngine
 {
@@ -20,6 +21,15 @@ namespace GameEngine
                     }
                 }
             }
+        }
+
+        public void MovePiece(Vector2Int source, Vector2Int destination)
+        {
+            var piece = mPieces[source.x, source.y];
+            mPieces[source.x, source.y] = null;
+            
+            mPieces[destination.x, destination.y] = piece;
+            piece.BeingMoved();
         }
     }
 }

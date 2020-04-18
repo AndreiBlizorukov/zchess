@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace GameEngine.Pieces
 {
@@ -6,6 +7,11 @@ namespace GameEngine.Pieces
     {
         public Queen(Color color) : base(color)
         {
+        }
+
+        public override List<Vector2Int> GetPotentialMoves(Vector2Int position)
+        {
+            return new List<Vector2Int>();
         }
     }
 }

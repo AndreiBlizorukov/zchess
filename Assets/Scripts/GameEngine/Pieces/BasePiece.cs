@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace GameEngine.Pieces
 {
@@ -14,6 +15,12 @@ namespace GameEngine.Pieces
         public Color GetColor()
         {
             return _color;
+        }
+
+        public abstract List<Vector2Int> GetPotentialMoves(Vector2Int position);
+
+        public virtual void BeingMoved()
+        {
         }
     }
 }

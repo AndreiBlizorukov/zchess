@@ -1,17 +1,24 @@
-﻿using UnityEngine;
+﻿using GameEngine;
+using GameEngine.GameMode;
+using GameEngine.Player;
+using UnityEngine;
 using View;
 
 public class GameManager : MonoBehaviour
 {
-    public PieceManager pieceManager;
+    public ViewManager ViewManager;
+
     void Start()
     {
-        var engine = new GameEngine.Game();
-        engine.Setup();
+        var gameEngine = new Game();
+        var mode = new Default();
+        gameEngine.Setup(
+            mode,
+            new Human(Color.white),
+            new Human(Color.black)
+        );
 
-        pieceManager.CreateBoard();
-        pieceManager.Setup(engine);
-
-        pieceManager.MoveWhite();
+        ViewManager.CreateBoard();
+        ViewManager.Setup(gameEngine);
     }
 }

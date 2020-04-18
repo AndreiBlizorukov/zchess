@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -10,8 +9,8 @@ namespace View.Pieces
         public Color mColor = Color.clear;
         public Cell mOriginalCell;
         public Cell mCurrentCell;
-
-        protected List<Cell> mHighlightedCells = new List<Cell>();
+        
+        public ViewManager viewManager;
 
         public virtual void Setup(Color newTeamColor, Color32 newSpriteColor)
         {
@@ -28,30 +27,10 @@ namespace View.Pieces
             gameObject.SetActive(true);
         }
 
-        protected void ShowCells()
-        {
-            foreach (var cell in mHighlightedCells)
-            {
-                cell.mOutlineImage.enabled = true;
-            }
-        }
-
-        protected void ClearCells()
-        {
-            foreach (var cell in mHighlightedCells)
-            {
-                cell.mOutlineImage.enabled = false;
-            }
-
-            mHighlightedCells.Clear();
-        }
-
         public override void OnBeginDrag(PointerEventData eventData)
         {
             base.OnBeginDrag(eventData);
-
-            //mHighlightedCells = mPieceManager.ValidateAvailableCells(this, CheckPath());
-            ShowCells();
+            viewManager.HighLightCells(mCurrentCell);
         }
 
         public override void OnDrag(PointerEventData eventData)
@@ -63,25 +42,13 @@ namespace View.Pieces
         public override void OnEndDrag(PointerEventData eventData)
         {
             base.OnEndDrag(eventData);
-
-            /*
-            foreach (var toCell in mHighlightedCells)
+            
+            viewManager.ClearHighLightedCells();
+            if (!viewManager.MovePiece(mCurrentCell, Input.mousePosition))
             {
-                if (RectTransformUtility.RectangleContainsScreenPoint(toCell.mRectTransform, Input.mousePosition))
-                {
-                    //mPieceManager.MovePiece(this, toCell);
-                    
-                    // trying to check if after enemy's move the king is under attack
-                    mPieceManager.mIsKingUnderAttack = IsKingUnderAttack();
-                    mPieceManager.SwitchSides(mColor);
-
-                    ClearCells();
-                    return;
-                }
-            }*/
-
-            ClearCells();
-            transform.position = mCurrentCell.transform.position;
+                // return piece to the original place
+                transform.position = mCurrentCell.transform.position;
+            }
         }
     }
 }
