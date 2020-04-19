@@ -1,7 +1,11 @@
-﻿namespace GameEngine.Player
+﻿using UnityEngine;
+
+namespace GameEngine.Player
 {
     public interface IPlayer
     {
-        UnityEngine.Color GetColor();
+        Color GetColor();
+        string GetColorText();
+
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using GameEngine;
 using GameEngine.Pieces;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace View
 {
@@ -10,6 +11,7 @@ namespace View
     {
         public Board mBoard;
         public GameObject mPiecePrefab;
+        public GameObject GameStateText;
         public static Game _gameEngine;
 
         public Dictionary<Color, List<View.Pieces.BasePiece>> Pieces =
@@ -148,7 +150,9 @@ namespace View
 
             if (_gameEngine.mState == Game.GameState.Checkmate)
             {
-                Debug.Log($"checkmate, winner is {_gameEngine.GetOppositePlayer().GetColor().ToString()} player");
+                GameStateText.GetComponent<Text>().text = $"checkmate, winner is {_gameEngine.GetOppositePlayer().GetColorText()} player";
+                GameStateText.GetComponent<Text>().enabled = true;
+                GameStateText.SetActive(true);
                 return;
             }
             
@@ -156,6 +160,9 @@ namespace View
             if (_gameEngine.mState == Game.GameState.Draw)
             {
                 Debug.Log($"draw");
+                GameStateText.GetComponent<Text>().text = "draw";
+                GameStateText.GetComponent<Text>().enabled = true;
+                
                 return;
             }
             

@@ -15,5 +15,12 @@ namespace GameEngine.Player
         {
             return _color;
         }
+
+        public string GetColorText()
+        {
+            return GetColor() == Color.black
+                ? "black"
+                : "white";
+        }
     }
 }
