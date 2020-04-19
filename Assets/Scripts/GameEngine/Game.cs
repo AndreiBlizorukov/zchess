@@ -16,7 +16,7 @@ namespace GameEngine
         private IPlayer _blackPlayer;
         public IPlayer mCurrentPlayer;
 
-        public bool mCheckmate = false;
+        public GameState mState = GameState.None;
 
         public void Setup(IMode mode, IPlayer whitePlayer, IPlayer blackPlayer)
         {
@@ -38,22 +38,60 @@ namespace GameEngine
         public void TogglePlayer()
         {
             mCurrentPlayer = GetOppositePlayer();
-            mCheckmate = IsCheckmate();
+            GetGameState();
         }
 
-        private bool IsCheckmate()
+        private void GetGameState()
         {
-            var myPiecesPositions = _board.GetPiecesPositions(mCurrentPlayer.GetColor());
+            var myPiecesPositions = _board.GetPiecesPositions(mCurrentPlayer.GetColor()).ToList();
+            var enemyPiecesPositions = _board.GetPiecesPositions(GetOppositePlayer().GetColor()).ToList();
+            
+            // if it's only 2 pieces and those both are kings
+            if (myPiecesPositions.Count == 1 && enemyPiecesPositions.Count == 1)
+            {
+                var myPiecePosition = myPiecesPositions.First();
+                var enemyPosition = enemyPiecesPositions.First();
+                
+                if (_board.mPieces[myPiecePosition.x, myPiecePosition.y].GetType() == typeof(King) 
+                    && _board.mPieces[enemyPosition.x, enemyPosition.y].GetType() == typeof(King))
+                {
+                    mState = GameState.Draw;
+                    return;
+                }
+            }
+            
             foreach (var myPiecesPosition in myPiecesPositions)
             {
                 var myPiece = _board.mPieces[myPiecesPosition.x, myPiecesPosition.y];
                 var moves = FilterCheckmateMoves(myPiecesPosition, myPiece.GetAvailableMoves(myPiecesPosition, _board));
-                if (moves.Any())
+                
+                // if current player have moves
+                if (!moves.Any())
                 {
-                    return false;
+                    var enemyPieces = _board.GetPiecesPositions(GetOppositePlayer().GetColor());
+                    foreach (var enemyPiecePosition in enemyPieces)
+                    {
+                        var enemyPiece = _board.mPieces[enemyPiecePosition.x, enemyPiecePosition.y];
+                        var enemyMoves = enemyPiece.GetAvailableMoves(enemyPiecePosition, _board);
+                        // if current player's king is under attack then checkmate
+                        foreach (var enemyMove in enemyMoves)
+                        {
+                            var enemyMovePiece = _board.mPieces[enemyMove.x, enemyMove.y];
+                            if (enemyMovePiece != null)
+                            {
+                                if (enemyMovePiece.GetType() == typeof(King))
+                                {
+                                    mState = GameState.Checkmate;
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                    
+                    mState = GameState.Draw;
+                    return;
                 }
             }
-            return true;
         }
 
         public IPlayer GetOppositePlayer()
@@ -111,6 +149,13 @@ namespace GameEngine
 
                 return true;
             }).ToList();
+        }
+
+        public enum GameState
+        {
+            None,
+            Draw,
+            Checkmate
         }
     }
 }
