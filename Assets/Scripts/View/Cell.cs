@@ -9,6 +9,8 @@ namespace View
         public RectTransform mRectTransform;
         public Vector2Int position;
         public Pieces.BasePiece mCurrentPiece;
+        public Text mLetterPlace;
+        public Text mNumberPlace;
 
         public void Setup()
         {
