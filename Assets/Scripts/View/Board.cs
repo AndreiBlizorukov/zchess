@@ -24,7 +24,7 @@ namespace View
                     mAllCells[x, y].Setup();
                     mAllCells[x, y].SetPosition(x, y);
 
-                    if ((x + y) % 2 == 0)
+                    if ((x + y) % 2 == 1)
                     {
                         mAllCells[x, y].GetComponent<Image>().color = new Color32(230, 220, 187, 255);
                     }
