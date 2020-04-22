@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        var gameEngine = new Game();
+        var gameEngine = Game.GetInstance();
         var mode = new Default();
         gameEngine.Setup(
             mode,

@@ -48,7 +48,10 @@ namespace View.Pieces
             {
                 // return piece to the original place
                 transform.position = mCurrentCell.transform.position;
+                return;
             }
+            
+            viewManager.EndOfTurn();
         }
     }
 }

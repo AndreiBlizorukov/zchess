@@ -15,6 +15,21 @@ namespace GameEngine
         private IPlayer _whitePlayer;
         private IPlayer _blackPlayer;
         public IPlayer mCurrentPlayer;
+        private static Game _game;
+
+        private Game()
+        {
+        }
+
+        public static Game GetInstance()
+        {
+            if (_game == null)
+            {
+                _game = new Game();
+            }
+
+            return _game;
+        }
 
         public GameState mState = GameState.None;
 
@@ -107,6 +122,13 @@ namespace GameEngine
             return nextPlayer;
         }
 
+        public Color GetOppositeColor(Color color)
+        {
+            return color == Color.white
+                ? Color.black
+                : Color.white;
+        }
+
         /// <summary>
         /// List of positions where its possible to move
         /// </summary>
@@ -127,12 +149,13 @@ namespace GameEngine
 
         private List<Vector2Int> FilterCheckmateMoves(Vector2Int position, List<Vector2Int> moves)
         {
+            var currentPiece = _board.mPieces[position.x, position.y];
             return moves.Where(move =>
             {
                 var newBoard = _board.Copy();
                 newBoard.MovePiece(position, move);
 
-                var enemyPiecePositions = newBoard.GetPiecesPositions(GetOppositePlayer().GetColor());
+                var enemyPiecePositions = newBoard.GetPiecesPositions(GetOppositeColor(currentPiece.GetColor()));
                 foreach (var enemyPiecePosition in enemyPiecePositions)
                 {
                     var enemyPiece = newBoard.mPieces[enemyPiecePosition.x, enemyPiecePosition.y];

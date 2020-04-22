@@ -6,6 +6,8 @@ namespace GameEngine.Pieces
     public class Rook : BasePiece
     {
         private readonly Vector3Int _movement = new Vector3Int(7, 7, 0);
+        public bool IsFirstMove = true;
+        
         public Rook(Color color) : base(color)
         {
         }
@@ -18,6 +20,12 @@ namespace GameEngine.Pieces
         public override IPiece Copy()
         {
             return new Rook(GetColor());
+        }
+        
+        public override void BeingMoved()
+        {
+            base.BeingMoved();
+            IsFirstMove = false;
         }
     }
 }

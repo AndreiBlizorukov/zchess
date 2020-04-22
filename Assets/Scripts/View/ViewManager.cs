@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GameEngine;
 using GameEngine.Pieces;
+using GameEngine.Rules;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +13,7 @@ namespace View
         public Board mBoard;
         public GameObject mPiecePrefab;
         public GameObject GameStateText;
-        public static Game _gameEngine;
+        public Game GameEngine;
 
         public Dictionary<Color, List<View.Pieces.BasePiece>> Pieces =
             new Dictionary<Color, List<View.Pieces.BasePiece>>
@@ -33,8 +34,8 @@ namespace View
 
         public void Setup(Game engine)
         {
-            _gameEngine = engine;
-            RenderPieces(_gameEngine.GetBoard().mPieces);
+            GameEngine = engine;
+            RenderPieces(GameEngine.GetBoard().mPieces);
 
             SetInteractive(Pieces[engine.mCurrentPlayer.GetColor()], true);
             SetInteractive(Pieces[engine.GetOppositePlayer().GetColor()], false);
@@ -88,10 +89,24 @@ namespace View
 
         public void HighLightCells(Cell currentCell)
         {
-            foreach (var highlightedPosition in _gameEngine.GetAvailableCells(currentCell.position))
+            foreach (var highlightedPosition in GameEngine.GetAvailableCells(currentCell.position))
             {
-                mBoard.mAllCells[highlightedPosition.x, highlightedPosition.y].mOutlineImage.enabled = true;
+                HighLightCell(highlightedPosition);
             }
+
+            if (currentCell.mCurrentPiece != null && typeof(View.Pieces.King) == currentCell.mCurrentPiece.GetType())
+            {
+                var moves = Castling.GetMoves(currentCell.position, GameEngine);
+                foreach (var move in moves)
+                {
+                    HighLightCell(move);
+                }
+            }
+        }
+
+        private void HighLightCell(Vector2Int position)
+        {
+            mBoard.mAllCells[position.x, position.y].mOutlineImage.enabled = true;
         }
 
         public void ClearHighLightedCells()
@@ -110,63 +125,107 @@ namespace View
                 y = currentCell.position.y
             };
 
-            var highlightedPositions = _gameEngine
-                .GetAvailableCells(from);
-
-            foreach (var position in highlightedPositions)
+            var availableCells = GameEngine.GetAvailableCells(from);
+            foreach (var position in availableCells)
             {
                 var targetCell = mBoard.mAllCells[position.x, position.y];
                 if (RectTransformUtility.RectangleContainsScreenPoint(targetCell.mRectTransform, mousePosition))
                 {
-                    if (targetCell.mCurrentPiece != null)
-                    {
-                        targetCell.mCurrentPiece.mCurrentCell = null;
-                        targetCell.mCurrentPiece.gameObject.SetActive(false);
-                    }
-
-                    var currentPiece = currentCell.mCurrentPiece;
-                    currentCell.mCurrentPiece = null;
-                    currentPiece.mCurrentCell = targetCell;
-                    targetCell.mCurrentPiece = currentPiece;
-                    targetCell.mCurrentPiece.mCurrentCell = targetCell;
-                    targetCell.mCurrentPiece.transform.position = targetCell.transform.position;
-
-
-                    _gameEngine.GetBoard()
+                    MovePiece(currentCell, targetCell);
+                    GameEngine.GetBoard()
                         .MovePiece(from, new Vector2Int(targetCell.position.x, targetCell.position.y));
-                    EndOfTurn();
+                    
                     return true;
                 }
             }
 
+            var piece = GameEngine.GetBoard().mPieces[from.x, from.y];
+            if (piece.GetType() == typeof(King))
+            {
+                var shortCastlingMoves = Castling.GetShortMoves(currentCell.position, GameEngine);
+                foreach (var castlingMove in shortCastlingMoves)
+                {
+                    var targetCell = mBoard.mAllCells[castlingMove.x, castlingMove.y];
+                    if (RectTransformUtility.RectangleContainsScreenPoint(targetCell.mRectTransform, mousePosition))
+                    {
+                        MovePiece(currentCell, targetCell);
+                        GameEngine.GetBoard()
+                            .MovePiece(from, new Vector2Int(targetCell.position.x, targetCell.position.y));
+
+                        var rookCell = mBoard.mAllCells[7, currentCell.position.y];
+                        var targetRookCell = mBoard.mAllCells[5, currentCell.position.y];
+                        MovePiece(rookCell, targetRookCell);
+
+                        GameEngine.GetBoard()
+                            .MovePiece(rookCell.position, new Vector2Int(targetRookCell.position.x, targetRookCell.position.y));
+
+                        return true;
+                    }
+                }
+
+                
+                var longCastlingMoves = Castling.GetLongMoves(currentCell.position, GameEngine);
+                foreach (var castlingMove in longCastlingMoves)
+                {
+                    var targetCell = mBoard.mAllCells[castlingMove.x, castlingMove.y];
+                    if (RectTransformUtility.RectangleContainsScreenPoint(targetCell.mRectTransform, mousePosition))
+                    {
+                        MovePiece(currentCell, targetCell);
+                        GameEngine.GetBoard()
+                            .MovePiece(from, new Vector2Int(targetCell.position.x, targetCell.position.y));
+                        
+                        var rookCell = mBoard.mAllCells[0, currentCell.position.y];
+                        var targetRookCell = mBoard.mAllCells[3, currentCell.position.y];
+                        MovePiece(rookCell, targetRookCell);
+                        GameEngine.GetBoard()
+                            .MovePiece(rookCell.position, new Vector2Int(targetRookCell.position.x, targetRookCell.position.y));
+                        
+                        return true;
+                    }
+                }
+            }
 
             return false;
         }
 
+        private void MovePiece(Cell current, Cell target)
+        {
+            if (target.mCurrentPiece != null)
+            {
+                target.mCurrentPiece.mCurrentCell = null;
+                target.mCurrentPiece.gameObject.SetActive(false);
+            }
+
+            var currentPiece = current.mCurrentPiece;
+            current.mCurrentPiece = null;
+            currentPiece.mCurrentCell = target;
+            target.mCurrentPiece = currentPiece;
+            target.mCurrentPiece.mCurrentCell = target;
+            target.mCurrentPiece.transform.position = target.transform.position;
+        }
+
         public void EndOfTurn()
         {
-            SetInteractive(Pieces[_gameEngine.mCurrentPlayer.GetColor()], false);
-            _gameEngine.TogglePlayer();
+            SetInteractive(Pieces[GameEngine.mCurrentPlayer.GetColor()], false);
+            GameEngine.TogglePlayer();
 
-            if (_gameEngine.mState == Game.GameState.Checkmate)
+            if (GameEngine.mState == Game.GameState.Checkmate)
             {
-                GameStateText.GetComponent<Text>().text = $"checkmate, winner is {_gameEngine.GetOppositePlayer().GetColorText()} player";
+                GameStateText.GetComponent<Text>().text = $"checkmate, winner is {GameEngine.GetOppositePlayer().GetColorText()} player";
                 GameStateText.GetComponent<Text>().enabled = true;
                 GameStateText.SetActive(true);
                 return;
             }
-            
-            
-            if (_gameEngine.mState == Game.GameState.Draw)
+
+            if (GameEngine.mState == Game.GameState.Draw)
             {
-                Debug.Log($"draw");
                 GameStateText.GetComponent<Text>().text = "draw";
                 GameStateText.GetComponent<Text>().enabled = true;
                 
                 return;
             }
             
-            SetInteractive(Pieces[_gameEngine.mCurrentPlayer.GetColor()], true);
+            SetInteractive(Pieces[GameEngine.mCurrentPlayer.GetColor()], true);
         }
     }
 }
