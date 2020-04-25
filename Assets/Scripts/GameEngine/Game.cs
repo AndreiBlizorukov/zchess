@@ -15,6 +15,7 @@ namespace GameEngine
         private IPlayer _whitePlayer;
         private IPlayer _blackPlayer;
         public IPlayer mCurrentPlayer;
+        public IPlayer _winner;
         private static Game _game;
 
         private Game()
@@ -53,10 +54,9 @@ namespace GameEngine
         public void TogglePlayer()
         {
             mCurrentPlayer = GetOppositePlayer();
-            GetGameState();
         }
 
-        private void GetGameState()
+        public void GetGameState()
         {
             var myPiecesPositions = _board.GetPiecesPositions(mCurrentPlayer.GetColor()).ToList();
             var enemyPiecesPositions = _board.GetPiecesPositions(GetOppositePlayer().GetColor()).ToList();
@@ -70,39 +70,39 @@ namespace GameEngine
                 if (_board.mPieces[myPiecePosition.x, myPiecePosition.y].GetType() == typeof(King)
                     && _board.mPieces[enemyPosition.x, enemyPosition.y].GetType() == typeof(King))
                 {
-                    mState = GameState.Draw;
+                    SetState(GameState.Draw);
                     return;
                 }
             }
 
-            // if current player have places to move
-            foreach (var myPiecesPosition in myPiecesPositions)
+            // if enemy player have places to move
+            foreach (var enemyPiecesPosition in enemyPiecesPositions)
             {
-                var myPiece = _board.mPieces[myPiecesPosition.x, myPiecesPosition.y];
-                var moves = FilterCheckmateMoves(myPiecesPosition, myPiece.GetAvailableMoves(myPiecesPosition, _board));
+                var myPiece = _board.mPieces[enemyPiecesPosition.x, enemyPiecesPosition.y];
+                var moves = FilterCheckmateMoves(enemyPiecesPosition, myPiece.GetAvailableMoves(enemyPiecesPosition, _board));
 
-                // if current player have moves
+                // if enemy player have moves
                 if (moves.Any())
                 {
-                    mState = GameState.None;
+                    SetState(GameState.None);
                     return;
                 }
             }
 
             // current player can't move and the king is under attack
-            var enemyPieces = _board.GetPiecesPositions(GetOppositePlayer().GetColor());
-            foreach (var enemyPiecePosition in enemyPieces)
+            var myPiecePositions = _board.GetPiecesPositions(mCurrentPlayer.GetColor());
+            foreach (var myPiecePosition in myPiecePositions)
             {
-                var enemyPiece = _board.mPieces[enemyPiecePosition.x, enemyPiecePosition.y];
-                var enemyMoves = enemyPiece.GetAvailableMoves(enemyPiecePosition, _board);
-                foreach (var enemyMove in enemyMoves)
+                var myPiece = _board.mPieces[myPiecePosition.x, myPiecePosition.y];
+                var myMoves = myPiece.GetAvailableMoves(myPiecePosition, _board);
+                foreach (var myMove in myMoves)
                 {
-                    var enemyMovePiece = _board.mPieces[enemyMove.x, enemyMove.y];
-                    if (enemyMovePiece != null)
+                    var myMovePiece = _board.mPieces[myMove.x, myMove.y];
+                    if (myMovePiece != null)
                     {
-                        if (enemyMovePiece.GetType() == typeof(King))
+                        if (myMovePiece.GetType() == typeof(King))
                         {
-                            mState = GameState.Checkmate;
+                            SetState(GameState.Checkmate, mCurrentPlayer);
                             return;
                         }
                     }
@@ -110,7 +110,7 @@ namespace GameEngine
             }
             
             // current player can't move but king is not under attack
-            mState = GameState.Draw;
+            SetState(GameState.Draw);
         }
 
         public IPlayer GetOppositePlayer()
@@ -176,6 +176,15 @@ namespace GameEngine
 
                 return true;
             }).ToList();
+        }
+
+        public void SetState(GameState state, IPlayer winner = null)
+        {
+            mState = state;
+            if (winner != null)
+            {
+                _winner = winner;
+            }
         }
 
         public enum GameState

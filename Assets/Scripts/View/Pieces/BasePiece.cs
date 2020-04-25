@@ -51,6 +51,7 @@ namespace View.Pieces
                 return;
             }
             
+            viewManager.GameEngine.GetGameState();
             viewManager.EndOfTurn();
         }
     }

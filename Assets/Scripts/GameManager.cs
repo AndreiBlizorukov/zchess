@@ -12,10 +12,11 @@ public class GameManager : MonoBehaviour
     {
         var gameEngine = Game.GetInstance();
         var mode = new Default();
+        
         gameEngine.Setup(
             mode,
-            new Human(Color.white),
-            new Human(Color.black)
+            new Human(Color.white, 300),
+            new Human(Color.black, 300)
         );
 
         ViewManager.CreateBoard();

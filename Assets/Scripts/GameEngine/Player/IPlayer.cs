@@ -6,6 +6,7 @@ namespace GameEngine.Player
     {
         Color GetColor();
         string GetColorText();
-
+        float GetTimer();
+        float DecrementTimer(float delta);
     }
 }

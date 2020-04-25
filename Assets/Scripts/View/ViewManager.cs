@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using GameEngine;
 using GameEngine.Pieces;
+using GameEngine.Player;
 using GameEngine.Rules;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +15,8 @@ namespace View
         public GameObject mPiecePrefab;
         public GameObject GameStateText;
         public Game GameEngine;
+        public Text whiteTimer;
+        public Text blackTimer;
 
         public Dictionary<Color, List<View.Pieces.BasePiece>> Pieces =
             new Dictionary<Color, List<View.Pieces.BasePiece>>
@@ -21,7 +24,7 @@ namespace View
                 {Color.white, new List<View.Pieces.BasePiece>()},
                 {Color.black, new List<View.Pieces.BasePiece>()},
             };
-
+        
         private Dictionary<Type, Type> _modelMapping = new Dictionary<Type, Type>
         {
             {typeof(Pawn), typeof(View.Pieces.Pawn)},
@@ -36,9 +39,20 @@ namespace View
         {
             GameEngine = engine;
             RenderPieces(GameEngine.GetBoard().mPieces);
+            SetupTimer(GameEngine.mCurrentPlayer);
+            SetupTimer(GameEngine.GetOppositePlayer());
 
             SetInteractive(Pieces[engine.mCurrentPlayer.GetColor()], true);
             SetInteractive(Pieces[engine.GetOppositePlayer().GetColor()], false);
+        }
+
+        private void SetupTimer(IPlayer player)
+        {
+            var timerText = GetTimer(player.GetColor());
+            var minutes = ((int)player.GetTimer() / 60).ToString("00");
+            var seconds = Math.Round(player.GetTimer() % 60).ToString("00");
+
+            timerText.text = $"{minutes}:{seconds}";
         }
 
         private void RenderPieces(IPiece[,] pieces)
@@ -207,11 +221,9 @@ namespace View
         public void EndOfTurn()
         {
             SetInteractive(Pieces[GameEngine.mCurrentPlayer.GetColor()], false);
-            GameEngine.TogglePlayer();
-
             if (GameEngine.mState == Game.GameState.Checkmate)
             {
-                GameStateText.GetComponent<Text>().text = $"checkmate, winner is {GameEngine.GetOppositePlayer().GetColorText()} player";
+                GameStateText.GetComponent<Text>().text = $"checkmate, winner is {GameEngine._winner.GetColorText()} player";
                 GameStateText.GetComponent<Text>().enabled = true;
                 GameStateText.SetActive(true);
                 return;
@@ -225,7 +237,15 @@ namespace View
                 return;
             }
             
+            GameEngine.TogglePlayer();
             SetInteractive(Pieces[GameEngine.mCurrentPlayer.GetColor()], true);
+        }
+
+        public Text GetTimer(Color color)
+        {
+            return color == Color.white
+                ? whiteTimer
+                : blackTimer;
         }
     }
 }
