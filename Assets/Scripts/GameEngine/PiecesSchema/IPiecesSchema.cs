@@ -1,8 +1,8 @@
 ﻿using GameEngine.Pieces;
 
-namespace GameEngine.GameMode
+namespace GameEngine.PiecesSchema
 {
-    public interface IMode
+    public interface IPiecesSchema
     {
         IPiece[,] CreatePieces();
     }

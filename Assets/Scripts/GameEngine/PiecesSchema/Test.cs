@@ -1,9 +1,9 @@
 ﻿using GameEngine.Pieces;
 using static UnityEngine.Color;
 
-namespace GameEngine.GameMode
+namespace GameEngine.PiecesSchema
 {
-    public class Test : IMode
+    public class Test : IPiecesSchema
     {
         public IPiece[,] CreatePieces()
         {

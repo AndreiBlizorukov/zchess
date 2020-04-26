@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GameEngine.GameMode;
+using GameEngine.Mode;
 using GameEngine.Pieces;
 using GameEngine.Player;
 using UnityEngine;
@@ -11,7 +11,6 @@ namespace GameEngine
     public class Game
     {
         private Board _board;
-        private IMode _mode;
         private IPlayer _whitePlayer;
         private IPlayer _blackPlayer;
         public IPlayer mCurrentPlayer;
@@ -34,15 +33,14 @@ namespace GameEngine
 
         public GameState mState = GameState.None;
 
-        public void Setup(IMode mode, IPlayer whitePlayer, IPlayer blackPlayer)
+        public void Setup(IMode mode)
         {
             _board = new Board();
-            _mode = mode;
-            _whitePlayer = whitePlayer;
-            _blackPlayer = blackPlayer;
-            mCurrentPlayer = whitePlayer;
+            _whitePlayer = mode.GetWhitePlayer();
+            _blackPlayer = mode.GetBlackPlayer();
+            mCurrentPlayer = _whitePlayer;
 
-            var pieces = _mode.CreatePieces();
+            var pieces =  mode.GetPositions().CreatePieces();
             _board.PlacePieces(pieces);
         }
 
@@ -132,7 +130,7 @@ namespace GameEngine
         /// <summary>
         /// List of positions where its possible to move
         /// </summary>
-        /// <param name="position">position for piece what we're trying to move </param>
+        /// <param name="position">schema for piece what we're trying to move </param>
         /// <param name="board"></param>
         /// <returns></returns>
         public List<Vector2Int> GetAvailableCells(Vector2Int position)

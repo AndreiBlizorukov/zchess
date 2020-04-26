@@ -1,5 +1,6 @@
 ﻿using GameEngine;
-using GameEngine.GameMode;
+using GameEngine.Mode;
+using GameEngine.PiecesSchema;
 using GameEngine.Player;
 using UnityEngine;
 using View;
@@ -11,13 +12,13 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         var gameEngine = Game.GetInstance();
-        var mode = new Default();
-        
-        gameEngine.Setup(
-            mode,
+        var mode = new VersusHuman(
+            new Default(), 
             new Human(Color.white, 300),
             new Human(Color.black, 300)
         );
+        
+        gameEngine.Setup(mode);
 
         ViewManager.CreateBoard();
         ViewManager.Setup(gameEngine);
