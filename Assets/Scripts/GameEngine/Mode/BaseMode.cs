@@ -1,5 +1,6 @@
 ﻿using GameEngine.BoardSchema;
 using GameEngine.Player;
+using View;
 
 namespace GameEngine.Mode
 {
@@ -8,12 +9,14 @@ namespace GameEngine.Mode
         protected IBoardSchema _schema;
         private readonly IPlayer _whitePlayer;
         private readonly IPlayer _blackPlayer;
+        protected readonly ViewManager _viewManager;
 
-        public BaseMode(IBoardSchema schema, IPlayer whitePlayer, IPlayer blackPlayer)
+        public BaseMode(IBoardSchema schema, IPlayer whitePlayer, IPlayer blackPlayer, ViewManager viewManager)
         {
             _schema = schema;
             _whitePlayer = whitePlayer;
             _blackPlayer = blackPlayer;
+            _viewManager = viewManager;
         }
 
         public IBoardSchema GetPositions()
@@ -29,6 +32,16 @@ namespace GameEngine.Mode
         public IPlayer GetBlackPlayer()
         {
             return _blackPlayer;
+        }
+
+        public void EndTurn(IPlayer activePlayer)
+        {
+            _viewManager.SetInteractive(activePlayer.GetColor(), false);
+        }
+
+        public virtual void NextTurn(IPlayer activePlayer)
+        {
+            _viewManager.SetInteractive(activePlayer.GetColor(), true);
         }
     }
 }

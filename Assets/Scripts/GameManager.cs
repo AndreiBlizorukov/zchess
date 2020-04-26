@@ -15,7 +15,8 @@ public class GameManager : MonoBehaviour
         var mode = new VersusHuman(
             new Default(), 
             new Human(Color.white, 300),
-            new Human(Color.black, 300)
+            new Human(Color.black, 300),
+            ViewManager
         );
         
         gameEngine.Setup(mode);

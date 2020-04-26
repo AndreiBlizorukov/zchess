@@ -16,6 +16,7 @@ namespace GameEngine
         public IPlayer mCurrentPlayer;
         public IPlayer _winner;
         private static Game _game;
+        private IMode _mode;
 
         private Game()
         {
@@ -38,6 +39,7 @@ namespace GameEngine
             _board = new Board();
             _whitePlayer = mode.GetWhitePlayer();
             _blackPlayer = mode.GetBlackPlayer();
+            _mode = mode;
             mCurrentPlayer = _whitePlayer;
 
             var pieces =  mode.GetPositions().CreatePieces();
@@ -190,6 +192,11 @@ namespace GameEngine
             None,
             Draw,
             Checkmate
+        }
+
+        public IMode GetMode()
+        {
+            return _mode;
         }
     }
 }

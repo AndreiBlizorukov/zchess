@@ -8,5 +8,7 @@ namespace GameEngine.Mode
         IBoardSchema GetPositions();
         IPlayer GetWhitePlayer();
         IPlayer GetBlackPlayer();
+        void NextTurn(IPlayer activePlayer);
+        void EndTurn(IPlayer activePlayer);
     }
 }

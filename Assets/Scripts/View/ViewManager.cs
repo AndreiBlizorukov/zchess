@@ -42,8 +42,8 @@ namespace View
             SetupTimer(GameEngine.mCurrentPlayer);
             SetupTimer(GameEngine.GetOppositePlayer());
 
-            SetInteractive(Pieces[engine.mCurrentPlayer.GetColor()], true);
-            SetInteractive(Pieces[engine.GetOppositePlayer().GetColor()], false);
+            SetInteractive(engine.mCurrentPlayer.GetColor(), true);
+            SetInteractive(engine.GetOppositePlayer().GetColor(), false);
         }
 
         private void SetupTimer(IPlayer player)
@@ -88,9 +88,9 @@ namespace View
         }
 
 
-        private void SetInteractive(IEnumerable<View.Pieces.BasePiece> pieces, bool value)
+        public void SetInteractive(Color color, bool value)
         {
-            foreach (var piece in pieces)
+            foreach (var piece in Pieces[color])
             {
                 piece.enabled = value;
             }
@@ -220,7 +220,7 @@ namespace View
 
         public void EndOfTurn()
         {
-            SetInteractive(Pieces[GameEngine.mCurrentPlayer.GetColor()], false);
+            GameEngine.GetMode().EndTurn(GameEngine.mCurrentPlayer);
             if (GameEngine.mState == Game.GameState.Checkmate)
             {
                 GameStateText.GetComponent<Text>().text = $"checkmate, winner is {GameEngine._winner.GetColorText()} player";
@@ -238,7 +238,7 @@ namespace View
             }
             
             GameEngine.TogglePlayer();
-            SetInteractive(Pieces[GameEngine.mCurrentPlayer.GetColor()], true);
+            GameEngine.GetMode().NextTurn(GameEngine.mCurrentPlayer);
         }
 
         public Text GetTimer(Color color)
