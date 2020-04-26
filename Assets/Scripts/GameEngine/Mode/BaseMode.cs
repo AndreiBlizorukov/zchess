@@ -1,22 +1,22 @@
-﻿using GameEngine.PiecesSchema;
+﻿using GameEngine.BoardSchema;
 using GameEngine.Player;
 
 namespace GameEngine.Mode
 {
     public abstract class BaseMode : IMode
     {
-        protected IPiecesSchema _schema;
+        protected IBoardSchema _schema;
         private readonly IPlayer _whitePlayer;
         private readonly IPlayer _blackPlayer;
 
-        public BaseMode(IPiecesSchema schema, IPlayer whitePlayer, IPlayer blackPlayer)
+        public BaseMode(IBoardSchema schema, IPlayer whitePlayer, IPlayer blackPlayer)
         {
             _schema = schema;
             _whitePlayer = whitePlayer;
             _blackPlayer = blackPlayer;
         }
 
-        public IPiecesSchema GetPositions()
+        public IBoardSchema GetPositions()
         {
             return _schema;
         }

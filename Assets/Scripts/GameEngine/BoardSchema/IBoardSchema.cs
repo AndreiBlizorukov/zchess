@@ -1,8 +1,8 @@
 ﻿using GameEngine.Pieces;
 
-namespace GameEngine.PiecesSchema
+namespace GameEngine.BoardSchema
 {
-    public interface IPiecesSchema
+    public interface IBoardSchema
     {
         IPiece[,] CreatePieces();
     }

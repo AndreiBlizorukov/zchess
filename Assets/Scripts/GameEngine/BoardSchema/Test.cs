@@ -1,22 +1,22 @@
 ﻿using GameEngine.Pieces;
 using static UnityEngine.Color;
 
-namespace GameEngine.PiecesSchema
+namespace GameEngine.BoardSchema
 {
-    public class Test : IPiecesSchema
+    public class Test : IBoardSchema
     {
         public IPiece[,] CreatePieces()
         {
             return new IPiece[,]
             {
+                {null, null, null, null, new King(black), null, null, null},
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {new Pawn(white), new Pawn(white), new Pawn(white), null, null, null, null, null},
+                {new Rook(white), null, null, null, new King(white), null, new Knight(white), new Rook(white)},
             };
         }
     }

@@ -1,11 +1,11 @@
-﻿using GameEngine.PiecesSchema;
+﻿using GameEngine.BoardSchema;
 using GameEngine.Player;
 
 namespace GameEngine.Mode
 {
     public interface IMode
     {
-        IPiecesSchema GetPositions();
+        IBoardSchema GetPositions();
         IPlayer GetWhitePlayer();
         IPlayer GetBlackPlayer();
     }
