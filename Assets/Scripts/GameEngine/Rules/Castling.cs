@@ -10,7 +10,7 @@ namespace GameEngine.Rules
         public static List<Vector2Int> GetShortMoves(Vector2Int kingPosition, Game game)
         {
             var moves = new List<Vector2Int>();
-            for (var i = kingPosition.x + 1; i < 8; i++)
+            for (var i = kingPosition.x + 1; i < 7; i++)
             {
                 if (game.GetBoard().mPieces[i, kingPosition.y] != null)
                 {
