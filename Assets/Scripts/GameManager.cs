@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     {
         var gameEngine = Game.GetInstance();
         var mode = new VersusHuman(
-            new Test(), 
+            new Default(), 
             new Human(Color.white, 300),
             new Human(Color.black, 300)
         );
