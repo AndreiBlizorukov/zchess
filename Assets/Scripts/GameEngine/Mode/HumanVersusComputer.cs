@@ -1,5 +1,6 @@
 ﻿using GameEngine.BoardSchema;
 using GameEngine.Logic;
+using GameEngine.Logic.Levels;
 using GameEngine.Player;
 using View;
 

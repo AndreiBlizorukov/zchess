@@ -2,9 +2,9 @@
 using System.Linq;
 using UnityEngine;
 
-namespace GameEngine.Logic
+namespace GameEngine.Logic.Levels
 {
-    public class Easiest : IlogicEngine
+    public class Level1 : IlogicEngine
     {
         public Move GetNextMove(Color color, Game gameEngine)
         {

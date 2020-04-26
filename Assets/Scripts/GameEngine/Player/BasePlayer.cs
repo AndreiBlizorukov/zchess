@@ -1,4 +1,5 @@
 ﻿using GameEngine.Logic;
+using GameEngine.Logic.Levels;
 using UnityEngine;
 
 namespace GameEngine.Player

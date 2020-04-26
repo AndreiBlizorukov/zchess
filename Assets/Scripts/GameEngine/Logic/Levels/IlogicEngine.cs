@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace GameEngine.Logic
+namespace GameEngine.Logic.Levels
 {
     public interface IlogicEngine
     {
