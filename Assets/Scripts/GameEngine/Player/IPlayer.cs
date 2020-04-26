@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using GameEngine.Logic;
+using UnityEngine;
 
 namespace GameEngine.Player
 {
@@ -8,5 +9,6 @@ namespace GameEngine.Player
         string GetColorText();
         float GetTimer();
         float DecrementTimer(float delta);
+        IlogicEngine GetLogicEngine();
     }
 }

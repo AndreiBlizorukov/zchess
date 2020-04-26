@@ -146,9 +146,6 @@ namespace View
                 if (RectTransformUtility.RectangleContainsScreenPoint(targetCell.mRectTransform, mousePosition))
                 {
                     MovePiece(currentCell, targetCell);
-                    GameEngine.GetBoard()
-                        .MovePiece(from, new Vector2Int(targetCell.position.x, targetCell.position.y));
-                    
                     return true;
                 }
             }
@@ -163,15 +160,9 @@ namespace View
                     if (RectTransformUtility.RectangleContainsScreenPoint(targetCell.mRectTransform, mousePosition))
                     {
                         MovePiece(currentCell, targetCell);
-                        GameEngine.GetBoard()
-                            .MovePiece(from, new Vector2Int(targetCell.position.x, targetCell.position.y));
-
                         var rookCell = mBoard.mAllCells[7, currentCell.position.y];
                         var targetRookCell = mBoard.mAllCells[5, currentCell.position.y];
                         MovePiece(rookCell, targetRookCell);
-
-                        GameEngine.GetBoard()
-                            .MovePiece(rookCell.position, new Vector2Int(targetRookCell.position.x, targetRookCell.position.y));
 
                         return true;
                     }
@@ -185,14 +176,9 @@ namespace View
                     if (RectTransformUtility.RectangleContainsScreenPoint(targetCell.mRectTransform, mousePosition))
                     {
                         MovePiece(currentCell, targetCell);
-                        GameEngine.GetBoard()
-                            .MovePiece(from, new Vector2Int(targetCell.position.x, targetCell.position.y));
-                        
                         var rookCell = mBoard.mAllCells[0, currentCell.position.y];
                         var targetRookCell = mBoard.mAllCells[3, currentCell.position.y];
                         MovePiece(rookCell, targetRookCell);
-                        GameEngine.GetBoard()
-                            .MovePiece(rookCell.position, new Vector2Int(targetRookCell.position.x, targetRookCell.position.y));
                         
                         return true;
                     }
@@ -202,8 +188,14 @@ namespace View
             return false;
         }
 
-        private void MovePiece(Cell current, Cell target)
+        public void MovePiece(Cell current, Cell target)
         {
+            var from = new Vector2Int
+            {
+                x = current.position.x,
+                y = current.position.y
+            };
+            
             if (target.mCurrentPiece != null)
             {
                 target.mCurrentPiece.mCurrentCell = null;
@@ -216,29 +208,29 @@ namespace View
             target.mCurrentPiece = currentPiece;
             target.mCurrentPiece.mCurrentCell = target;
             target.mCurrentPiece.transform.position = target.transform.position;
+            
+            GameEngine.GetBoard()
+                .MovePiece(from, new Vector2Int(target.position.x, target.position.y));
         }
 
-        public void EndOfTurn()
+        public bool CheckStopGame()
         {
-            GameEngine.GetMode().EndTurn(GameEngine.mCurrentPlayer);
             if (GameEngine.mState == Game.GameState.Checkmate)
             {
                 GameStateText.GetComponent<Text>().text = $"checkmate, winner is {GameEngine._winner.GetColorText()} player";
                 GameStateText.GetComponent<Text>().enabled = true;
                 GameStateText.SetActive(true);
-                return;
+                return true;
             }
 
             if (GameEngine.mState == Game.GameState.Draw)
             {
                 GameStateText.GetComponent<Text>().text = "draw";
                 GameStateText.GetComponent<Text>().enabled = true;
-                
-                return;
+                return true;
             }
-            
-            GameEngine.TogglePlayer();
-            GameEngine.GetMode().NextTurn(GameEngine.mCurrentPlayer);
+
+            return false;
         }
 
         public Text GetTimer(Color color)

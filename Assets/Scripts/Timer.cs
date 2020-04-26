@@ -22,7 +22,13 @@ public class Timer : MonoBehaviour
         if (timer <= 0)
         {
             _viewManager.GameEngine.SetState(Game.GameState.Checkmate, _viewManager.GameEngine.GetOppositePlayer());
-            _viewManager.EndOfTurn();
+            if (_viewManager.CheckStopGame())
+            {
+                return;
+            }
+            
+            _viewManager.GameEngine.TogglePlayer();
+            _viewManager.GameEngine.GetMode().NextTurn(_viewManager.GameEngine.mCurrentPlayer);
             return;
         }
 

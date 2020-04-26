@@ -34,14 +34,12 @@ namespace GameEngine.Mode
             return _blackPlayer;
         }
 
-        public void EndTurn(IPlayer activePlayer)
+        public virtual void EndTurn(IPlayer activePlayer)
         {
-            _viewManager.SetInteractive(activePlayer.GetColor(), false);
         }
 
         public virtual void NextTurn(IPlayer activePlayer)
         {
-            _viewManager.SetInteractive(activePlayer.GetColor(), true);
         }
     }
 }

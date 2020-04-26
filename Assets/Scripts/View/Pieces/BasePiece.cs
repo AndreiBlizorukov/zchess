@@ -52,7 +52,14 @@ namespace View.Pieces
             }
             
             viewManager.GameEngine.GetGameState();
-            viewManager.EndOfTurn();
+            viewManager.GameEngine.GetMode().EndTurn(viewManager.GameEngine.mCurrentPlayer);
+            if (viewManager.CheckStopGame())
+            {
+                return;
+            }
+            
+            viewManager.GameEngine.TogglePlayer();
+            viewManager.GameEngine.GetMode().NextTurn(viewManager.GameEngine.mCurrentPlayer);
         }
     }
 }
